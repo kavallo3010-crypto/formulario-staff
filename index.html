@@ -1,49 +1,83 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Formulario Staff - Sem Rotulo</title>
-</head>
-<body style="font-family: Arial; max-width: 500px; margin: auto;">
-
-<h2>Formulario Staff - Sem Rotulo</h2>
-
-<form id="formulario">
-
-  <label>Nome:</label><br>
-  <input type="text" id="nome" required><br><br>
-
-  <label>Idade:</label><br>
-  <input type="number" id="idade" required><br><br>
-
-  <label>Por que quer ser staff?</label><br>
-  <textarea id="motivo" required></textarea><br><br>
-
-  <button type="submit">Enviar</button>
-
-</form>
-
 <script>
-document.getElementById("formulario").addEventListener("submit", function(e) {
+document.getElementById("formulario").addEventListener("submit", async function(e) {
   e.preventDefault();
 
-  const nome = document.getElementById("nome").value;
-  const idade = document.getElementById("idade").value;
-  const motivo = document.getElementById("motivo").value;
+  const dados = {
+    nome: document.getElementById("nome").value,
+    idade: document.getElementById("idade").value,
+    cidade: document.getElementById("cidade").value,
+    tempo: document.getElementById("tempo").value,
+    experiencia: document.getElementById("experiencia").value,
+    personalidade: document.getElementById("personalidade").value,
+    equipe: document.getElementById("equipe").value,
+    criticas: document.getElementById("criticas").value,
+    conflito: document.getElementById("conflito").value,
+    discussao: document.getElementById("discussao").value,
+    amigo: document.getElementById("amigo").value,
+    preconceito: document.getElementById("preconceito").value,
+    desrespeito: document.getElementById("desrespeito").value,
+    motivo: document.getElementById("motivo").value,
+    agregar: document.getElementById("agregar").value,
+    imparcial: document.getElementById("imparcial").value,
+    responsabilidade: document.getElementById("responsabilidade").value
+  };
 
-  fetch("COLE_AQUI_SEU_WEBHOOK", {
+  const resposta = await fetch("/api/enviar", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      content: "**Nova candidatura para Staff**\n\n" +
-               "Nome: " + nome + "\n" +
-               "Idade: " + idade + "\n" +
-               "Motivo: " + motivo
+      content:
+`📋 **Nova Candidatura - Sem Rotulo**
+
+👤 Nome: ${dados.nome}
+🎂 Idade: ${dados.idade}
+📍 Cidade: ${dados.cidade}
+⏳ Tempo online: ${dados.tempo}
+🛠 Experiência: ${dados.experiencia}
+
+🧠 Personalidade:
+${dados.personalidade}
+
+🤝 Trabalho em equipe:
+${dados.equipe}
+
+💬 Como lida com críticas:
+${dados.criticas}
+
+⚠️ Conflito anterior:
+${dados.conflito}
+
+🔥 Discussão no chat:
+${dados.discussao}
+
+👥 Amigo quebrando regra:
+${dados.amigo}
+
+🚨 Acusação de preconceito:
+${dados.preconceito}
+
+❗ Desrespeito direto:
+${dados.desrespeito}
+
+🎯 Motivo:
+${dados.motivo}
+
+🌟 O que agrega:
+${dados.agregar}
+
+⚖️ Imparcialidade:
+${dados.imparcial}
+
+🛡 Responsabilidade:
+${dados.responsabilidade}`
     })
   });
 
-  alert("Formulario enviado com sucesso!");
+  if (resposta.ok) {
+    alert("Candidatura enviada com sucesso!");
+    document.getElementById("formulario").reset();
+  } else {
+    alert("Erro ao enviar candidatura.");
+  }
 });
 </script>
-
-</body>
-</html>
