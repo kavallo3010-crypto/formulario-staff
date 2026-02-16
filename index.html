@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulario Staff - Sem Rotulo</title>
+</head>
+<body style="font-family: Arial; max-width: 500px; margin: auto;">
+
+<h2>Formulario Staff - Sem Rotulo</h2>
+
+<form id="formulario">
+
+  <label>Nome:</label><br>
+  <input type="text" id="nome" required><br><br>
+
+  <label>Idade:</label><br>
+  <input type="number" id="idade" required><br><br>
+
+  <label>Por que quer ser staff?</label><br>
+  <textarea id="motivo" required></textarea><br><br>
+
+  <button type="submit">Enviar</button>
+
+</form>
+
+<script>
+document.getElementById("formulario").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const nome = document.getElementById("nome").value;
+  const idade = document.getElementById("idade").value;
+  const motivo = document.getElementById("motivo").value;
+
+  fetch("COLE_AQUI_SEU_WEBHOOK", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      content: "**Nova candidatura para Staff**\n\n" +
+               "Nome: " + nome + "\n" +
+               "Idade: " + idade + "\n" +
+               "Motivo: " + motivo
+    })
+  });
+
+  alert("Formulario enviado com sucesso!");
+});
+</script>
+
+</body>
+</html>
