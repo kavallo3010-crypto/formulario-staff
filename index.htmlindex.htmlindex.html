@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recrutamento Staff - Sem Rótulo</title>
+    <style>
+        :root { --primary: #7289da; --bg: #2c2f33; --card: #36393f; --input: #40444b; --text: #ffffff; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 15px; display: flex; justify-content: center; }
+        .container { background: var(--card); width: 100%; max-width: 500px; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 25px; }
+        h3 { border-bottom: 1px solid var(--primary); padding-bottom: 5px; margin-top: 30px; font-size: 1.1rem; color: var(--primary); }
+        label { display: block; margin-top: 15px; font-weight: 600; font-size: 0.9rem; }
+        input, textarea, select { width: 100%; padding: 12px; margin-top: 8px; border-radius: 6px; border: 1px solid #23272a; background: var(--input); color: white; box-sizing: border-box; font-size: 1rem; }
+        input:focus, textarea:focus { border-color: var(--primary); outline: none; }
+        button { width: 100%; padding: 15px; margin-top: 30px; background: var(--primary); border: none; color: white; font-weight: bold; font-size: 1.1rem; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #5b6eae; transform: translateY(-2px); }
+        .success-msg { display: none; text-align: center; background: #43b581; padding: 20px; border-radius: 8px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="formContainer">
+    <h2>📝 Recrutamento - Sem Rótulo</h2>
+    <form id="staffForm">
+        <h3>1. Informações Básicas</h3>
+        <label>Nome / Nick no Discord:</label>
+        <input type="text" name="Nome/Nick" required placeholder="Ex: Carlos#1234">
+        
+        <label>Idade:</label>
+        <input type="number" name="Idade" required>
+
+        <label>Cidade (opcional):</label>
+        <input type="text" name="Cidade">
+
+        <label>Quanto tempo passa online por dia?</label>
+        <input type="text" name="Tempo Online" required placeholder="Ex: 6 horas">
+
+        <label>Já teve experiência como staff? Se sim, onde?</label>
+        <textarea name="Experiencia Anterior" rows="2"></textarea>
+
+        <h3>2. Sobre Você</h3>
+        <label>Como você descreveria sua personalidade?</label>
+        <textarea name="Personalidade" rows="3" required></textarea>
+
+        <label>Você trabalha melhor em equipe ou sozinho? Explique.</label>
+        <textarea name="Equipe ou Sozinho" rows="3" required></textarea>
+
+        <label>Como você lida com críticas?</label>
+        <textarea name="Lidar com Criticas" rows="2" required></textarea>
+
+        <label>Já teve algum conflito em servidor? Como resolveu?</label>
+        <textarea name="Conflitos Anteriores" rows="3" required></textarea>
+
+        <h3>3. Situações Práticas</h3>
+        <label>Dois membros começam a discutir no chat. O que você faz?</label>
+        <textarea name="Situacao: Discussao" rows="3" required></textarea>
+
+        <label>Um amigo seu quebra uma regra. Como você age?</label>
+        <textarea name="Situacao: Amigo" rows="3" required></textarea>
+
+        <label>Um membro acusa outro de preconceito. Qual procedimento?</label>
+        <textarea name="Situacao: Preconceito" rows="3" required></textarea>
+
+        <label>Um membro desrespeita você diretamente. Como reage?</label>
+        <textarea name="Situacao: Desrespeito" rows="3" required></textarea>
+
+        <h3>4. Compromisso</h3>
+        <label>Por que quer ser staff do Sem Rotulo?</label>
+        <textarea name="Motivo" rows="3" required></textarea>
+
+        <label>O que você pode agregar à comunidade?</label>
+        <textarea name="Agregado" rows="3" required></textarea>
+
+        <label>Está disposto a agir com imparcialidade?</label>
+        <select name="Imparcialidade" required>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+        </select>
+
+        <label>Preparado para assumir responsabilidade?</label>
+        <select name="Responsabilidade" required>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+        </select>
+
+        <button type="submit" id="btnEnviar">Enviar Formulário</button>
+    </form>
+</div>
+
+<div class="success-msg" id="successMsg">
+    <h3>✅ Enviado com sucesso!</h3>
+    <p>Sua candidatura foi recebida. Aguarde o contato da staff no Discord.</p>
+</div>
+
+<script>
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1472985495179890690/LEypcC49L9oooj1MVs9inhVUvA7czkZu5VYc5ZZrhRsrPVuxW_QaihPvudgq2zpcp_1W";
+
+    document.getElementById('staffForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "Enviando...";
+        btn.disabled = true;
+        
+        const formData = new FormData(e.target);
+        const embeds = [{
+            title: "🚀 Nova Candidatura para Staff",
+            color: 7506394, // Cor azul do Discord
+            fields: []
+        }];
+
+        formData.forEach((value, key) => {
+            embeds[0].fields.push({
+                name: key,
+                value: value || "Não informado",
+                inline: false
+            });
+        });
+
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ embeds: embeds })
+        })
+        .then(() => {
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'block';
+        })
+        .catch(() => {
+            alert('Erro ao enviar. Tente novamente.');
+            btn.innerText = "Enviar Formulário";
+            btn.disabled = false;
+        });
+    });
+</script>
+
+</body>
+</html>
